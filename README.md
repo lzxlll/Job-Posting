@@ -73,8 +73,13 @@ We compare this mapping result to the result based on algorithm in `Mapping the 
 
 ## ***Extract information Process***
 
-We extract information in the online job descriptions by searching for the key words. Our keywords file [our_chinese_mapping.xlsx](https://github.com/lzxlll/Job-Posting/files/7533317/our_chinese_mapping.xlsx) includes three spreadsheets (techonology, character, O*NET) with the same format: job characteristics, and our judgement. 
+We extract information in the online job descriptions by searching for the key words. Our keywords file [our_chinese_mapping.xlsx](https://github.com/lzxlll/Job-Posting/files/7533317/our_chinese_mapping.xlsx) includes three spreadsheets (techonology, character, O*NET) with the same format: job characteristics, and our judgement. For each job character, we apply the CBOW to generate a list of CBOW keywords based on our judgement. 
 
-Our purpose is to count the apperance of the keywords in the description. 
+- Usage of different technologies (e.h., Microsoft Word, Python, Matlab); 
+- Character, financial skills, problem management skills and so on;
+- O*NET work styles, skills, knowledge requirements, and activities.
+
+
+Our purpose is to count the apperance of the keywords in the description. By doing so, we decompose the texted description into a set of dummies variables. For instance, there are 67 job characteristics associated with techonology in our complied keywords file. Then, we created 67 columns with each one corresponding to a technology keywords. We count the apperance of each keywords and fill in the cell for each observation (job description). 
 
 
