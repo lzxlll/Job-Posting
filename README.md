@@ -8,30 +8,35 @@ This project intends to:
 4. assess the quality of the mapping by comparing mapping of the 1000 most frequent job postings by manual to the mapping by algorithm. 
 5. extract information from job descriptions. 
 
-## Mapping Process
+## ***Mapping Process***
 
-### Identify and drop the duplicated/missing value job vacancy postings
+#### 1. **Identify and drop the duplicated/missing value job vacancy postings**
 We first delete the observations with missing job title information (obs = ?), this accounts for ?% of the total observations. 
 Second, we drop the duplicated job postings following the creteria: we sort the observations with same firm ID, firm location and job title in an ascending date order, the duplicated job postings refers to postings with identical firm ID and firm location and posted within the same year-month. This process drops ? which amounts to ?% of the total observations.
 
-- Statistics: 
-  - 
+:tada: **Statistics**
+- [ ] Number of observations dropped because of N/A in firm ID, firm location, posting date, job title and job description?
+- [ ] Number of observations dropped because of duplicated job postings?
+- [ ] What is the frequency distribution of the posting date, by year-day?
+- [ ] What is the frequency distribution of the online job posting by source?
 
 
-
-
-
-### Extract the 1000 most frequent job posting titles
+#### 2. **Extract the 1000 most frequent job posting titles**
 To identify the 1000 most frequent job posting titles, we group the postings by job titles. Then, calculate the frequency within each group. There are 28,949,287 observations share the 1000 most frequent job posting titles, which amounts to ?% of the total observations.
 
 
-### Mapping the online posting titles to Chinese classification and codes of occupations (GB/T 6565-2015)
+
+#### 3. **Mapping the online posting titles to Chinese classification and codes of occupations (GB/T 6565-2015)**
 The Chinese classification and codes of occupations (GB/T 6565-2015) contains 4 levels of occupational classification: general (8 groups), medium (66 groups), detail (413 groups) and 1838 occupations. 
 
 For each occupation, a job description and definition is attched. In particular, for each job title t in our online posting data, we compute the similarity between t and all of the job titles, τ, which appear in Chinese classification and codes of occupations (GB/T 6565-2015). For each standardized job title τ, we observe an GB/T occupation code. For the job title t, we assign to t the GB/T occupation code of the standardized job title τ. We do this for any job title that appears at least twice in our online job posting data. 
 
-### Mapping effectiveness check
+
+
+#### 4. **Mapping effectiveness check**
 We rely on comparing the results of manual mapping and algorithm mapping to validate our practice. In `Extract the 1000 most frequent job posting titles` step we rank the online titles by frequency and select the top 1000 as candadats for manual mapping. We use human knowledge and solely rely on ``job title" information to map top 1000 online job titles to Chinese classification and codes of occupations (GB/T 6565-2015). This effectiveness check rely on two assumptions: (i) human-knowledge based manual mapping is the most precise one. (ii) online job posting's title and description should be matched. This is, job title `computer engineer' should has `computer engineer' related information in the job description rather than other arbitrary descriptions. 
+
+:tada: **Statistics**
 
 We compare this mapping result to the result based on algorithm in `Mapping the online posting titles to Chinese classification and codes of occupations (GB/T 6565-2015)` in the following ways:
 
@@ -45,7 +50,7 @@ We compare this mapping result to the result based on algorithm in `Mapping the 
 
 
 
-## Extract information Process
+## ***Extract information Process***
 We extract information in the online job descriptions by searching for the key words.
 
 
