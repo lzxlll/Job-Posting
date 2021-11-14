@@ -1,5 +1,5 @@
 # Job-Posting
-The total number of observations we acquired from raw job posting data is 140,107,287.
+The raw job posting data has a total number of observations of 140,107,287.
 
 This project intends to:
 1. identify and drop the duplicated/missing value job vacancy postings (job_group_test.py).
@@ -11,7 +11,26 @@ This project intends to:
 ## ***Mapping Process***
 
 #### 1. **Identify and drop the duplicated/missing value job vacancy postings**
-We first delete the observations with missing job title information (obs = ?), this accounts for ?% of the total observations. 
+We first delete the observations with missing job title information (obs = ?), this accounts for ?% of the total observations. We have the following informations:
+
+| Variable | Format |
+| --- | --- |
+|招聘主键ID  | bigint(20)|
+|公司ID  | bigint(20)|
+|公司名称 | varchar(255)|
+|城市名称 | varchar(255)|
+|公司所在区域 | varchar(255)|
+|工作薪酬 | varchar(255)|
+|教育要求 | varchar(255)|
+|工作经历 | varchar(255)|
+|工作描述 | varchar(255)|
+|职位名称 | varchar(255)|
+|工作名称 | varchar(255)|
+|招聘数量 | varchar(255)|
+|发布日期  | datetime|
+|行业名称 | varchar(255)|
+|来源 | varchar(255)|
+
 Second, we drop the duplicated job postings following the creteria: we sort the observations with same firm ID, firm location and job title in an ascending date order, the duplicated job postings refers to postings with identical firm ID and firm location and posted within the same year-month. This process drops ? which amounts to ?% of the total observations.
 
 :tada: **Statistics**
@@ -34,13 +53,15 @@ For each occupation, a job description and definition is attched. In particular,
 
 
 #### 4. **Mapping effectiveness check**
-We rely on comparing the results of manual mapping and algorithm mapping to validate our practice. In `Extract the 1000 most frequent job posting titles` step we rank the online titles by frequency and select the top 1000 as candadats for manual mapping. We use human knowledge and solely rely on ``job title" information to map top 1000 online job titles to Chinese classification and codes of occupations (GB/T 6565-2015). This effectiveness check rely on two assumptions: (i) human-knowledge based manual mapping is the most precise one. (ii) online job posting's title and description should be matched. This is, job title `computer engineer' should has `computer engineer' related information in the job description rather than other arbitrary descriptions. 
+We rely on comparing the results of manual mapping and algorithm mapping to validate our practice. In `Extract the 1000 most frequent job posting titles` step we rank the online titles by frequency and select the top 1000 as candadats for manual mapping. We use human knowledge and solely rely on "job title" information to map top 1000 online job titles to Chinese classification and codes of occupations (GB/T 6565-2015) [occupation_cat_china.xlsx](https://github.com/lzxlll/Job-Posting/files/7533333/occupation_cat_china.xlsx).
+ 
+This effectiveness check rely on two assumptions: (i) human-knowledge based manual mapping is the most precise one. (ii) online job posting's title and description should be matched. This is, job title "computer engineer" should has "computer engineer" related information in the job description rather than other arbitrary descriptions. 
 
 :tada: **Statistics**
 
 We compare this mapping result to the result based on algorithm in `Mapping the online posting titles to Chinese classification and codes of occupations (GB/T 6565-2015)` in the following ways:
 
-- For each top 1000 online job titles, we check what percentage of algorithm based mapping's most likely mapping has the same mapping results as manual mapping. Be more specific, we have mentioned `28,949,287 observations share the 1000 most frequent job posting titles'. 
+- For each top 1000 online job titles, we check what percentage of algorithm based mapping's most likely mapping has the same mapping results as manual mapping. Be more specific, we have mentioned above that `28,949,287 observations share the 1000 most frequent job posting titles'. 
 
   Let's say there are 1,000 postings have online job title "sale agent", and we manually mapped it to "salesman" in the GB/T 6565-2015. On the other hand, by algorithm 30% of "sale agent" can be mapped to "teacher", 20% can be mapped to "cook", 50% can be mapped to "salesman". Then, in this case "salesman" is the most likely mapping and it matches with the manual mapping result. We calculate the percentage of this chance for all the top 1000 online job titles. 
 
@@ -51,6 +72,9 @@ We compare this mapping result to the result based on algorithm in `Mapping the 
 
 
 ## ***Extract information Process***
-We extract information in the online job descriptions by searching for the key words.
+
+We extract information in the online job descriptions by searching for the key words. Our keywords file [our_chinese_mapping.xlsx](https://github.com/lzxlll/Job-Posting/files/7533317/our_chinese_mapping.xlsx) includes three spreadsheets (techonology, character, O*NET) with the same format: job characteristics, and our judgement. 
+
+Our purpose is to count the apperance of the keywords in the description. 
 
 
