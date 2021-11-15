@@ -53,7 +53,7 @@ For each occupation, a job description and definition is attched. In particular,
 
 
 #### 4. **Mapping effectiveness check**
-We rely on comparing the results of manual mapping and algorithm mapping to validate our practice. In `Extract the 1000 most frequent job posting titles` step we rank the online titles by frequency and select the top 1000 as candadats for manual mapping. We use human knowledge and solely rely on "job title" information to map top 1000 online job titles to Chinese classification and codes of occupations (GB/T 6565-2015) [occupation_cat_china.xlsx](https://github.com/lzxlll/Job-Posting/files/7533333/occupation_cat_china.xlsx).
+We rely on comparing the results of manual mapping and algorithm mapping to validate our practice. In `Extract the 1000 most frequent job posting titles` step we rank the online titles by frequency and select the top 1000 as candadats for manual mapping. We use human knowledge and solely rely on "job title" information to map top 1000 online job titles to Chinese classification and codes of occupations (GB/T 6565-2015) [our_chinese_mapping.xlsx](https://github.com/lzxlll/Job-Posting/files/7537969/our_chinese_mapping.xlsx).
  
 This effectiveness check rely on two assumptions: (i) human-knowledge based manual mapping is the most precise one. (ii) online job posting's title and description should be matched. This is, job title "computer engineer" should has "computer engineer" related information in the job description rather than other arbitrary descriptions. 
 
@@ -73,7 +73,7 @@ We compare this mapping result to the result based on algorithm in `Mapping the 
 
 ## ***Extract information Process***
 
-We extract information in the online job descriptions by searching for the key words. Our keywords file [our_chinese_mapping.xlsx](https://github.com/lzxlll/Job-Posting/files/7533317/our_chinese_mapping.xlsx) includes three spreadsheets (techonology, character, O*NET) with the same format: job characteristics, and our judgement. For each job character, we apply the CBOW to generate a list of CBOW keywords based on our judgement. 
+We extract information in the online job descriptions by searching for the key words. Our keywords file [our_chinese_mapping.xlsx](https://github.com/lzxlll/Job-Posting/files/7537955/our_chinese_mapping.xlsx) includes three spreadsheets (techonology, character, O*NET) with the same format: job characteristics, and our judgement. For each job character, we apply the CBOW to generate a list of CBOW keywords based on our judgement. 
 
 - Usage of different technologies (e.h., Microsoft Word, Python, Matlab); 
 - Character, financial skills, problem management skills and so on;
