@@ -70,6 +70,8 @@
 - 我们比较了基于手动映射和基于算法映射的 28,949,287 个观测值的频率分布。这就是，我们比较了基于匹配和基于算法算法匹配的结果的 GB/T 6565-2015 标题频率分布。理想情况下，两个分布应该共享相似的模式。
 
 
+<hr />
+
 ## 提取信息过程
 
 我们通过搜索关键词来提取网络职位描述中的信息。我们的关键词文件[our_chinese_mapping.xlsx](https://github.com/lzxlll/Job-Posting/files/7537944/our_chinese_mapping.xlsx)
