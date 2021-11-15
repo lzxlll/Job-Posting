@@ -2,11 +2,11 @@
 The raw job posting data has a total number of observations of 140,107,287.
 
 This project intends to:
-1. identify and drop the duplicated/missing value job vacancy postings (job_group_test.py).
-2. extract the 1000 most frequent job posting titles, then manually map to the standard Chinese occupation codes (job_group_test.py). 
-3. mapping the posting job titles to Chinese classification and codes of occupations (GB/T 6565-2015) (Continuous Bag of Words Model (CBOW)).
-4. assess the quality of the mapping by comparing mapping of the 1000 most frequent job postings by manual to the mapping by algorithm. 
-5. extract information from job descriptions. 
+1. Split the huge raw text data file into 142 files, with each file contains 1,000,000 online job postings (job_posting_subset.ipynb). Identify and drop the duplicated/missing value job vacancy postings (job_group_test.py).
+2. Extract the 1000 most frequent job posting titles, then manually map to the standard Chinese occupation codes (job_group_test.py). 
+3. Mapping the posting job titles to Chinese classification and codes of occupations (GB/T 6565-2015) (Continuous Bag of Words Model (CBOW)).
+4. Assess the quality of the mapping by comparing mapping of the 1000 most frequent job postings by manual to the mapping by algorithm. 
+5. Extract information from job descriptions. 
 
 ## ***Mapping Process***
 
