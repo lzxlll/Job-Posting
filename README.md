@@ -69,7 +69,7 @@ We compare this mapping result to the result based on algorithm in `Mapping the 
 
 
 
-
+<hr />
 
 ## ***Extract information Process***
 
