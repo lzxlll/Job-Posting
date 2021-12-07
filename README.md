@@ -46,14 +46,15 @@ To identify the 1000 most frequent job posting titles, we group the postings by 
 
 
 #### 3. **Mapping the online posting titles to Chinese classification and codes of occupations (GB/T 6565-2015)**
-The Chinese classification and codes of occupations (GB/T 6565-2015) contains 4 levels of occupational classification: general (8 groups), medium (66 groups), detail (413 groups) and 1838 occupations. 
+The Chinese classification and codes of occupations (GB/T 6565-2015) [GB/T 6565-2015.xlsx](https://github.com/lzxlll/Job-Posting/files/7668463/default.xlsx) contains 4 levels of occupational classification: general (8 groups), medium (66 groups), detail (413 groups) and 1838 occupations. 
 
 For each occupation, a job description and definition is attched. In particular, for each job title t in our online posting data, we compute the similarity between t and all of the job titles, τ, which appear in Chinese classification and codes of occupations (GB/T 6565-2015). For each standardized job title τ, we observe an GB/T occupation code. For the job title t, we assign to t the GB/T occupation code of the standardized job title τ. We do this for any job title that appears at least twice in our online job posting data. 
 
 
 
 #### 4. **Mapping effectiveness check**
-We rely on comparing the results of manual mapping and algorithm mapping to validate our practice. In `Extract the 1000 most frequent job posting titles` step we rank the online titles by frequency and select the top 1000 as candadats for manual mapping. We use human knowledge and solely rely on "job title" information to map top 1000 online job titles to Chinese classification and codes of occupations (GB/T 6565-2015) [our_chinese_mapping.xlsx](https://github.com/lzxlll/Job-Posting/files/7537969/our_chinese_mapping.xlsx).
+We rely on comparing the results of manual mapping and algorithm mapping to validate our practice. In `Extract the 1000 most frequent job posting titles` step we rank the online titles by frequency and select the top 1000 as candadats for manual mapping. We use human knowledge and solely rely on "job title" information to map top 1000 online job titles to Chinese classification and codes of occupations (GB/T 6565-2015) [our_chinese_mapping.xlsx](https://github.com/lzxlll/Job-Posting/files/7668450/our_chinese_mapping.xlsx)
+.
  
 This effectiveness check rely on two assumptions: (i) human-knowledge based manual mapping is the most precise one. (ii) online job posting's title and description should be matched. This is, job title "computer engineer" should has "computer engineer" related information in the job description rather than other arbitrary descriptions. 
 
@@ -73,13 +74,26 @@ We compare this mapping result to the result based on algorithm in `Mapping the 
 
 ## ***Extract information Process***
 
-We extract information in the online job descriptions by searching for the key words. Our keywords file [our_chinese_mapping.xlsx](https://github.com/lzxlll/Job-Posting/files/7537955/our_chinese_mapping.xlsx) includes three spreadsheets (techonology, character, O*NET) with the same format: job characteristics, and our judgement. For each job character, we apply the CBOW to generate a list of CBOW keywords based on our judgement. 
+Our task in this section is to characterize the text within each job description in terms of the skills, tasks, and other occupational elements described in the job ad.  Specifically, we count the apperance of the keywords in the description. By doing so, we decompose the texted description into a set of dummies variables. For instance, there are 67 job characteristics associated with techonology in our complied keywords file. Then, we created 67 columns with each one corresponding to a technology keywords. We count the apperance of each keywords and fill in the cell for each observation (job description). 
+
+Our keywords build on "The Evolution of Work in the United States" by Enghin Atalay, Phai Phongthiengtham, Sebastian Sotelo and Daniel Tannenbaum - American Economic Journal: Applied Economics (2020) https://www.aeaweb.org/articles?id=10.1257/app.20190070. 
+
+We first use google translator to convert each keyword (in English) to Chinese. Because keywords are related within each category, a direct translation results in multiple synonyms been dropped. To handle this issue, we rely on our CBOW model to expand the keywords list and manually screen for the CBOW model based key words. Therefore, our keywords list include (i) direct translation of keywords from "The Evolution of Work in the United States"; (ii) keywords generated from CBOW model. 
+
+We extract information in the online job descriptions by searching for the key words. Our keywords file [our_chinese_mapping.xlsx](https://github.com/lzxlll/Job-Posting/files/7668240/our_chinese_mapping.xlsx) includes three spreadsheets (techonology, character, O*NET) with the same format: job characteristics, and our judgement. For each job character, we apply the CBOW to generate a list of CBOW keywords based on our judgement. 
 
 - Usage of different technologies (e.h., Microsoft Word, Python, Matlab); 
-- Character, financial skills, problem management skills and so on;
+  - reuqired programming technology, such as C++, python and so on. 
+  - the usage of industrial system, such as SAP, 金碟 and so on.
+  - the application of big data. 
+  
+- Character, financial skills, problem management skills and so on; Nonroutine (interactive, analytic, and manual) and routine (cognitive, and manual) tasks;
+  - nonroutine (interactive, analytic, and manual) and routine (cognitive, and manual) tasks, which is build on Spitz-Oener (2006).
+  - different skill-related words, which is build on Deming and Kahn (2017).
+  - personality traits (Big 5), which is build on John, Naumann, and Soto (2008). 
+  
 - O*NET work styles, skills, knowledge requirements, and activities.
 
 
-Our purpose is to count the apperance of the keywords in the description. By doing so, we decompose the texted description into a set of dummies variables. For instance, there are 67 job characteristics associated with techonology in our complied keywords file. Then, we created 67 columns with each one corresponding to a technology keywords. We count the apperance of each keywords and fill in the cell for each observation (job description). 
 
 
