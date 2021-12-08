@@ -13,23 +13,14 @@ This project intends to:
 #### 1. **Identify and drop the duplicated/missing value job vacancy postings**
 We first delete the observations with missing job title information (obs = ?), this accounts for ?% of the total observations. We have the following informations:
 
-| Variable | Format |
-| --- | --- |
-|招聘主键ID  | bigint(20)|
-|公司ID  | bigint(20)|
-|公司名称 | varchar(255)|
-|城市名称 | varchar(255)|
-|公司所在区域 | varchar(255)|
-|工作薪酬 | varchar(255)|
-|教育要求 | varchar(255)|
-|工作经历 | varchar(255)|
-|工作描述 | varchar(255)|
-|职位名称 | varchar(255)|
-|工作名称 | varchar(255)|
-|招聘数量 | varchar(255)|
-|发布日期  | datetime|
-|行业名称 | varchar(255)|
-|来源 | varchar(255)|
+| Variable | Format | Variable | Format | Variable | Format |
+| --- | --- |  --- | --- |   --- | --- |
+|招聘主键ID  | bigint(20)| 工作薪酬 | varchar(255)| 工作名称 | varchar(255)|
+|公司ID  | bigint(20)| 教育要求 | varchar(255)| 招聘数量 | varchar(255)|
+|公司名称 | varchar(255)| 工作经历 | varchar(255)|发布日期  | datetime|
+|城市名称 | varchar(255)| 工作描述 | varchar(255)|行业名称 | varchar(255)|
+|公司所在区域 | varchar(255)| 职位名称 | varchar(255)|来源 | varchar(255)|
+
 
 Second, we drop the duplicated job postings following the creteria: we sort the observations with same firm ID, firm location and job title in an ascending date order, the duplicated job postings refers to postings with identical firm ID and firm location and posted within the same year-month. This process drops ? which amounts to ?% of the total observations.
 
