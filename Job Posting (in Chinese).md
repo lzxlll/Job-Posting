@@ -14,23 +14,13 @@
 ### 1. 识别并删除重复/缺失值的职位空缺发布
 我们首先删除缺少职位信息（obs = ?）的观测值，这占总观测值的 ?%。 我们有以下信息：
 
-| Variable | Format |
-| --- | --- |
-|招聘主键ID  | bigint(20)|
-|公司ID  | bigint(20)|
-|公司名称 | varchar(255)|
-|城市名称 | varchar(255)|
-|公司所在区域 | varchar(255)|
-|工作薪酬 | varchar(255)|
-|教育要求 | varchar(255)|
-|工作经历 | varchar(255)|
-|工作描述 | varchar(255)|
-|职位名称 | varchar(255)|
-|工作名称 | varchar(255)|
-|招聘数量 | varchar(255)|
-|发布日期  | datetime|
-|行业名称 | varchar(255)|
-|来源 | varchar(255)|
+| Variable | Format | Variable | Format | Variable | Format |
+| --- | --- |  --- | --- |   --- | --- |
+|招聘主键ID  | bigint(20)| 工作薪酬 | varchar(255)| 工作名称 | varchar(255)|
+|公司ID  | bigint(20)| 教育要求 | varchar(255)| 招聘数量 | varchar(255)|
+|公司名称 | varchar(255)| 工作经历 | varchar(255)|发布日期  | datetime|
+|城市名称 | varchar(255)| 工作描述 | varchar(255)|行业名称 | varchar(255)|
+|公司所在区域 | varchar(255)| 职位名称 | varchar(255)|来源 | varchar(255)|
 
 其次，我们按照一下标准删除重复的职位发布：我们按日期升序对具有相同公司 ID、公司位置和职位名称的观察进行排序。重复的职位发布是指具有相同公司ID和公司位置并在同一月份发布的职位信息。 这个过程删除了 ？个观测值这相当于总观察值的 ?%。
 
@@ -54,8 +44,7 @@
 
 
 ### 4. 算法匹配有效性检查
-我们依靠比较手动映射和算法映射的结果来验证有效性。在`提取 1000 个最常见的职位发布标题`步骤中，我们按频率对网络标题进行排名，并选择前 1000 个作为手动映射的候选对象。我们使用人类知识，仅依靠“职位”信息将前 1000 名网络职位映射到中国职业分类和代码（GB/T 6565-2015）[our_chinese_mapping.xlsx](https://github.com/lzxlll/Job-Posting/files/7537941/our_chinese_mapping.xlsx)
-。
+我们依靠比较手动映射和算法映射的结果来验证有效性。在`提取 1000 个最常见的职位发布标题`步骤中，我们按频率对网络标题进行排名，并选择前 1000 个作为手动映射的候选对象。我们使用人类知识，仅依靠“职位”信息将前 1000 名网络职位映射到中国职业分类和代码（GB/T 6565-2015）[our_chinese_mapping.xlsx](https://github.com/lzxlll/Job-Posting/files/7537941/our_chinese_mapping.xlsx)。人工手动匹配的频率最高的前1000个职位的匹配结果：[top1000_manual_mapping.xlsx](https://github.com/lzxlll/Job-Posting/files/7783017/top1000_manual_mapping.xlsx)。
  
 这种有效性检查依赖于两个假设：（i）基于人类知识的手动匹配是最精确的。 (ii) 网络职位发布的标题和描述应匹配。也就是说，职位名称“计算机工程师”应该在职位描述中包含“计算机工程师”相关信息，而不是其他任意描述。
 
