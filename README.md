@@ -44,9 +44,9 @@ For each occupation, a job description and definition is attched. In particular,
 
 
 #### 4. **Mapping effectiveness check**
-We rely on comparing the results of manual mapping and algorithm mapping to validate our practice. In `Extract the 1000 most frequent job posting titles` step we rank the online titles by frequency and select the top 1000 as candadats for manual mapping. We use human knowledge and solely rely on "job title" information to map top 1000 online job titles to Chinese classification and codes of occupations (GB/T 6565-2015) [our_chinese_mapping.xlsx](https://github.com/lzxlll/Job-Posting/files/7668450/our_chinese_mapping.xlsx)
-.
- 
+We rely on comparing the results of manual mapping and algorithm mapping to validate our practice. In `Extract the 1000 most frequent job posting titles` step we rank the online titles by frequency and select the top 1000 as candidates for manual mapping. We use human knowledge and solely rely on "job title" information to map top 1000 online job titles to Chinese classification and codes of occupations (GB/T 6565-2015) [our_chinese_mapping.xlsx](https://github.com/lzxlll/Job-Posting/files/7668450/our_chinese_mapping.xlsx)
+. See the manually done mapping here: [top1000_manual_mapping.xlsx](https://github.com/lzxlll/Job-Posting/files/7783013/top1000_manual_mapping.xlsx).
+
 This effectiveness check rely on two assumptions: (i) human-knowledge based manual mapping is the most precise one. (ii) online job posting's title and description should be matched. This is, job title "computer engineer" should has "computer engineer" related information in the job description rather than other arbitrary descriptions. 
 
 :tada: **Statistics**
