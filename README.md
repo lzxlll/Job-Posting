@@ -2,13 +2,12 @@
 The raw job posting data has a total number of observations of 140,107,287.
 
 This project intends to:
-1. Split the huge raw text data file into 142 files, with each file contains 1,000,000 online job postings. Identify and drop the duplicated/missing value job vacancy postings (data_subset_screen.ipynb).
-2. Extract the 1000 most frequent job posting titles, then manually map to the standard Chinese occupation codes (job_group_test.py). 
-3. Mapping the posting job titles to Chinese classification and codes of occupations (GB/T 6565-2015) (Continuous Bag of Words Model (CBOW)).
-4. Assess the quality of the mapping by comparing mapping of the 1000 most frequent job postings by manual to the mapping by algorithm. 
-5. Extract information from job descriptions. 
+1. Clean the raw data.
+2. Label the sample data used for fine-tune.
+3. Fine-tune the BERT-WWM model.
+4. Evaluate the performance. 
 
-## ***Mapping Process***
+## ***Summary of Data Cleaning***
 
 #### 1. **Identify and drop the duplicated/missing value job vacancy postings**
 We first delete the observations with missing job title information (obs = ?), this accounts for ?% of the total observations. We have the following informations:
@@ -21,71 +20,114 @@ We first delete the observations with missing job title information (obs = ?), t
 |城市名称 | varchar(255)| 工作描述 | varchar(255)|行业名称 | varchar(255)|
 |公司所在区域 | varchar(255)| 职位名称 | varchar(255)|来源 | varchar(255)|
 
+### Data Generation and Cleaning Process for Job Posting Data
 
-Second, we drop the duplicated job postings following the creteria: we sort the observations with same firm ID, firm location and job title in an ascending date order, the duplicated job postings refers to postings with identical firm ID and firm location and posted within the same year-month. This process drops ? which amounts to ?% of the total observations.
+In this section, we outline the data generation and cleaning process for job posting data used in our analysis. The primary data consists of job postings collected from 10 major job posting websites in China. The data is cleaned and processed to remove duplicates, unnecessary entries, and inconsistencies to ensure reliability and accuracy in our analysis.
 
-:tada: **Statistics**
-- [ ] Number of observations dropped because of N/A in firm ID, firm location, posting date, job title and job description?
-- [ ] Number of observations dropped because of duplicated job postings?
-- [ ] What is the frequency distribution of the posting date, by year-day?
-- [ ] What is the frequency distribution of the online job posting by source?
+#### 1. Data Import and Preliminary Cleaning
+The raw data files are imported as pandas DataFrames using the `read_dat_data` function. This function reads the `.dat` files and assigns appropriate column names to the DataFrames.
 
+#### 2. Data Preprocessing
+- Missing values in the `工作名称` (job title) column are replaced with values from the `职位名称` (position name) column.
+- Rows with missing `发布日期` (publish date) are dropped.
+- Entries with `兼职` (part-time) in the job title are dropped.
+- The dataset is filtered to include only data from 10 major job posting websites in China.
+- Duplicate entries within a month, with the same `公司ID` (company ID), `工作名称` (job title), and `城市名称` (city name) are removed.
 
-#### 2. **Extract the 1000 most frequent job posting titles**
-To identify the 1000 most frequent job posting titles, we group the postings by job titles. Then, calculate the frequency within each group. There are 28,949,287 observations share the 1000 most frequent job posting titles, which amounts to ?% of the total observations.
+#### 3. Data Separation
+After preprocessing, the `工作描述` (job description) column is separated from the rest of the data to make the dataset more manageable.
 
-
-
-#### 3. **Mapping the online posting titles to Chinese classification and codes of occupations (GB/T 6565-2015)**
-The Chinese classification and codes of occupations (GB/T 6565-2015) [GB/T 6565-2015.xlsx](https://github.com/lzxlll/Job-Posting/files/7668463/default.xlsx) contains 4 levels of occupational classification: general (8 groups), medium (66 groups), detail (413 groups) and 1838 occupations. 
-
-For each occupation, a job description and definition is attched. In particular, for each job title t in our online posting data, we compute the similarity between t and all of the job titles, τ, which appear in Chinese classification and codes of occupations (GB/T 6565-2015). For each standardized job title τ, we observe an GB/T occupation code. For the job title t, we assign to t the GB/T occupation code of the standardized job title τ. We do this for any job title that appears at least twice in our online job posting data. 
-
-
-
-#### 4. **Mapping effectiveness check**
-We rely on comparing the results of manual mapping and algorithm mapping to validate our practice. In `Extract the 1000 most frequent job posting titles` step we rank the online titles by frequency and select the top 1000 as candidates for manual mapping. We use human knowledge and solely rely on "job title" information to map top 1000 online job titles to Chinese classification and codes of occupations (GB/T 6565-2015) [our_chinese_mapping.xlsx](https://github.com/lzxlll/Job-Posting/files/7797327/our_chinese_mapping.xlsx). See the manually done mapping here: [top1000_manual_mapping.xlsx](https://github.com/lzxlll/Job-Posting/files/7783013/top1000_manual_mapping.xlsx).
-
-This effectiveness check rely on two assumptions: (i) human-knowledge based manual mapping is the most precise one. (ii) online job posting's title and description should be matched. This is, job title "computer engineer" should has "computer engineer" related information in the job description rather than other arbitrary descriptions. 
-
-:tada: **Statistics**
-
-We compare this mapping result to the result based on algorithm in `Mapping the online posting titles to Chinese classification and codes of occupations (GB/T 6565-2015)` in the following ways:
-
-- For each top 1000 online job titles, we check what percentage of algorithm based mapping's most likely mapping has the same mapping results as manual mapping. Be more specific, we have mentioned above that `28,949,287 observations share the 1000 most frequent job posting titles'. 
-
-  Let's say there are 1,000 postings have online job title "sale agent", and we manually mapped it to "salesman" in the GB/T 6565-2015. On the other hand, by algorithm 30% of "sale agent" can be mapped to "teacher", 20% can be mapped to "cook", 50% can be mapped to "salesman". Then, in this case "salesman" is the most likely mapping and it matches with the manual mapping result. We calculate the percentage of this chance for all the top 1000 online job titles. 
-
-- We compare the frequency distribution of 28,949,287 observations for manual based mapping and algorithm based mapping. This is, we compare the GB/T 6565-2015 title frequency distribution based on manual and algorithms. Ideally, both distributions should share similar patterns. 
+#### 4. Data Aggregation
+The cleaned and preprocessed data is saved as separate CSV files. All the CSV files are combined into a single DataFrame, containing only the `工作名称` (job title) column. This final DataFrame is saved as `charac_posting.csv`, which is used for further analysis.
 
 
 
-<hr />
 
-## ***Extract information Process***
+## ***Summary of Data Processing***
 
-Our task in this section is to characterize the text within each job description in terms of the skills, tasks, and other occupational elements described in the job ad.  Specifically, we count the apperance of the keywords in the description. By doing so, we decompose the texted description into a set of dummies variables. For instance, there are 67 job characteristics associated with techonology in our complied keywords file. Then, we created 67 columns with each one corresponding to a technology keywords. We count the apperance of each keywords and fill in the cell for each observation (job description). 
+In this study, we aim to analyze job postings data to classify them into Standard Occupational Classification (SOC) categories. The data generation and cleaning process is as follows:
 
-Our keywords build on "The Evolution of Work in the United States" by Enghin Atalay, Phai Phongthiengtham, Sebastian Sotelo and Daniel Tannenbaum - American Economic Journal: Applied Economics (2020) https://www.aeaweb.org/articles?id=10.1257/app.20190070. 
+1. **Read the data**:  
+   Load the raw job posting data from a CSV file into a pandas DataFrame, **`df`**. Only the '工作名称' (job title) column is needed for this step.
 
-We first use google translator to convert each keyword (in English) to Chinese. Since the character and ONET categories' original language is English, we first translate them into Chinese via Google translator. To extend the synonym word list, we apply the "WantWords" model (link: https://wantwords.thunlp.org/home/) which is An Open-source Online Reverse Dictionary (https://github.com/thunlp/WantWords.git). For each word in the character and ONET categories, we find 5 closet words from the "WantWords" and form the final key words list.
+2. **Filter out rare job titles**:  
+   Count the occurrences of each unique job title in the DataFrame, and filter out those that occur less than 5 times, resulting in 883,695 unique job titles across 50,340,840 job postings.
 
-We rely on the "WantWords" model to expand the keywords list and manually screen for the "WantWords" model based key words. Therefore, our keywords list include (i) direct translation of keywords from "The Evolution of Work in the United States"; (ii) keywords generated from the "WantWords" model. 
+3. **Parallelize job title classification**:  
+   Split the DataFrame containing the filtered job titles into 300 smaller DataFrames and save each sub-DataFrame as a CSV file.
 
-We extract information in the online job descriptions by searching for the key words. Our keywords file [our_chinese_mapping.xlsx](https://github.com/lzxlll/Job-Posting/files/7668240/our_chinese_mapping.xlsx) includes three spreadsheets (techonology, character, O*NET) with the same format: job characteristics, and our judgement. 
+4. **Classify job titles using ChatGPT**:  
+   Define a function, **`classify_job_title`**, that takes a job title and an API key, and returns the most likely SOC code for that job title. The function sends a request to the ChatGPT API using the provided API key and extracts the SOC code from the API response.
 
-- Usage of different technologies (e.h., Microsoft Word, Python, Matlab); 
-  - reuqired programming technology, such as C++, python and so on. 
-  - the usage of industrial system, such as SAP, 金碟 and so on.
-  - the application of big data. 
-  
-- Character, financial skills, problem management skills and so on; Nonroutine (interactive, analytic, and manual) and routine (cognitive, and manual) tasks;
-  - nonroutine (interactive, analytic, and manual) and routine (cognitive, and manual) tasks, which is build on Spitz-Oener (2006).
-  - different skill-related words, which is build on Deming and Kahn (2017).
-  - personality traits (Big 5), which is build on John, Naumann, and Soto (2008). 
-  
-- O*NET work styles, skills, knowledge requirements, and activities.
+5. **Run classification in parallel**:  
+   Using Python's `ThreadPoolExecutor`, create a pool of 30 worker threads to classify the job titles concurrently. Read each sub-DataFrame containing job titles from the CSV files, submit the job titles to the thread pool for classification, append the resulting SOC codes to the DataFrame, and save it as a new CSV file.
+
+6. **Merge the classified titles**:  
+   Append all the classified titles' CSV files to create a single DataFrame, **`df_title`**. Keep only the '工作名称' and 'soc_code' columns, and drop any rows with missing SOC codes.
+
+7. **Map unmapped job postings using job descriptions**:  
+   Merge the DataFrame containing the SOC codes with another DataFrame containing job descriptions based on the job title. This will be used to map the remaining unmapped job postings.
+
+8. **Load ONET SOC job titles**:  
+   Load a DataFrame containing all possible SOC job titles from the ONET dataset to help remove incorrect mappings.
+
+9. **Filter out rare SOC codes**:  
+   Filter out broad occupations with less than 100 job postings to ensure that there is enough data to train a good model. This process results in 408 broad occupations.
+
+10. **Randomly sample job postings**:  
+    Randomly sample 3,000 job postings within each broad occupation and save them to a CSV file. Feed this data to ChatGPT to map the job postings to SOC categories using job descriptions.
+
+11. **Verify labeling based on job descriptions**:  
+    Define a function, **`classify_job_desp`**, that takes a job description, job title, and API key, and returns whether the given SOC code is a reasonable classification based on the job description. The function sends a request to the ChatGPT API using the provided API key and returns a yes or no answer.
+
+12. **Double-check the sub-sampled dataset**:  
+    Parallelize the job description classification using `ThreadPoolExecutor`, and append the true/false indicator to the DataFrame. Save the resulting DataFrame as a new CSV file.
+
+13. **Generate the final dataset for model fine-tuning**:  
+    Combine the dataset that passed the second check (classification using job descriptions) with the dataset that only passed the first check (classification using job titles). Assign a weight of 1 to the samples that passed the second check and a weight of 0.5 to the samples that only passed the first check. This final dataset is used for model fine-tuning.
 
 
+
+
+
+## ***Summary of Fine-tune Chinese BERT-wwm***
+
+In this Python code, we are fine-tuning a pre-trained BERT model to classify job postings based on their Standard Occupational Classification (SOC) codes using the `transformers` library. Below is a breakdown of the code into several steps with detailed explanations for each.
+
+1. **Import necessary libraries and load data**:  
+   First, we import essential libraries such as `pandas`, `torch`, and `transformers`, and read the data from a CSV file. The data includes columns like `soc_code`, `true_ind`, `工作名称` (job title), and `工作描述` (job description).
+
+2. **Preprocessing the data**:  
+   We clean the `soc_code` column by removing '-' symbols and converting it to integers. In the `true_ind` column, we replace 'Yes' with `True` and `NaN` with `False`, indicating if a label is more reliable. This reliability indicator will be used to assign different weights to samples during model training.
+
+3. **Splitting the data**:  
+   We split the data into training, validation, and testing sets in a 60-20-20 ratio using the `train_test_split` function from the `scikit-learn` library.
+
+4. **Creating a new column 'soc_code1'**:  
+   We generate a new column, `soc_code1`, which maps unique SOC codes to sequential integer labels. This simplifies the classification task and aids the model in learning patterns in the data.
+
+5. **Tokenization**:  
+   Job titles and descriptions are tokenized using the BERT tokenizer, which converts text into a format compatible with the BERT model.
+
+6. **Assigning weights to samples**:  
+   Based on the `true_ind` column, we assign different weights to samples during training. More reliable samples receive higher weights, directing the model’s focus towards learning from these.
+
+7. **Creating a custom PyTorch Dataset**:  
+   We create a custom PyTorch Dataset class, `JobPostingDataset`, to store the tokenized text, labels, and weights. This class will be used to generate data loaders for efficient training, validation, and testing.
+
+8. **Preparing data loaders**:  
+   Using the custom `JobPostingDataset` class, we create data loaders that enable efficient batch loading of data during training, validation, and testing.
+
+9. **Computing class weights**:  
+   To address class imbalance, we calculate class weights from the training data and incorporate them into the `CrossEntropyLoss` criterion. This encourages the model to give more attention to minority classes during training.
+
+10. **Defining the model, optimizer, and learning rate scheduler**:  
+    We fine-tune a pre-trained BERT model for our classification task, setting the output label count to the number of unique `soc_code1` values. The `AdamW` optimizer and a learning rate scheduler with a warmup period are used for training.
+
+11. **Training the model with early stopping**:  
+    The model is trained using a loop with early stopping based on validation loss. If validation loss doesn’t improve for a specified number of consecutive epochs (as set by the `early_stopping_patience` variable), training halts to prevent overfitting.
+
+12. **Evaluating the model**:  
+    The model's performance is evaluated on the validation set using a custom evaluation function that computes the validation loss. The model with the lowest validation loss is saved as the best model.
 
 
