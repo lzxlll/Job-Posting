@@ -7,10 +7,7 @@ This project intends to:
 3. Fine-tune the BERT-WWM model.
 4. Evaluate the performance. 
 
-## ***Summary of Data Cleaning***
-
-#### 1. **Identify and drop the duplicated/missing value job vacancy postings**
-We first delete the observations with missing job title information (obs = ?), this accounts for ?% of the total observations. We have the following informations:
+## Data Outline
 
 | Variable | Format | Variable | Format | Variable | Format |
 | --- | --- |  --- | --- |   --- | --- |
@@ -20,7 +17,8 @@ We first delete the observations with missing job title information (obs = ?), t
 |城市名称 | varchar(255)| 工作描述 | varchar(255)|行业名称 | varchar(255)|
 |公司所在区域 | varchar(255)| 职位名称 | varchar(255)|来源 | varchar(255)|
 
-### Data Generation and Cleaning Process for Job Posting Data
+
+## ***Summary of Data Cleaning***
 
 In this section, we outline the data generation and cleaning process for job posting data used in our analysis. The primary data consists of job postings collected from 10 major job posting websites in China. The data is cleaned and processed to remove duplicates, unnecessary entries, and inconsistencies to ensure reliability and accuracy in our analysis.
 
@@ -43,7 +41,7 @@ The cleaned and preprocessed data is saved as separate CSV files. All the CSV fi
 
 
 
-## ***Summary of Data Processing***
+## ***Summary of Label the Sample for Fine-tune***
 
 In this study, we aim to analyze job postings data to classify them into Standard Occupational Classification (SOC) categories. The data generation and cleaning process is as follows:
 
