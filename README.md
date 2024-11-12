@@ -84,7 +84,7 @@ In this study, we aim to analyze job postings data to classify them into Standar
     Parallelize the job description classification using `ThreadPoolExecutor`, and append the true/false indicator to the DataFrame. Save the resulting DataFrame as a new CSV file.
 
 13. **Generate the final dataset for model fine-tuning**:  
-    Combine the dataset that passed the second check (classification using job descriptions) with the dataset that only passed the first check (classification using job titles). Assign a weight of 1 to the samples that passed the second check and a weight of 0.5 to the samples that only passed the first check. This final dataset is used for model fine-tuning.
+    Dataset that passed the second check (classification using job descriptions). This final dataset is used for model fine-tuning.
 
 
 
@@ -109,25 +109,22 @@ In this Python code, we are fine-tuning a pre-trained BERT model to classify job
 5. **Tokenization**:  
    Job titles and descriptions are tokenized using the BERT tokenizer, which converts text into a format compatible with the BERT model.
 
-6. **Assigning weights to samples**:  
-   Based on the `true_ind` column, we assign different weights to samples during training. More reliable samples receive higher weights, directing the model’s focus towards learning from these.
-
-7. **Creating a custom PyTorch Dataset**:  
+6. **Creating a custom PyTorch Dataset**:  
    We create a custom PyTorch Dataset class, `JobPostingDataset`, to store the tokenized text, labels, and weights. This class will be used to generate data loaders for efficient training, validation, and testing.
 
-8. **Preparing data loaders**:  
+7. **Preparing data loaders**:  
    Using the custom `JobPostingDataset` class, we create data loaders that enable efficient batch loading of data during training, validation, and testing.
 
-9. **Computing class weights**:  
+8. **Computing class weights**:  
    To address class imbalance, we calculate class weights from the training data and incorporate them into the `CrossEntropyLoss` criterion. This encourages the model to give more attention to minority classes during training.
 
-10. **Defining the model, optimizer, and learning rate scheduler**:  
+9. **Defining the model, optimizer, and learning rate scheduler**:  
     We fine-tune a pre-trained BERT model for our classification task, setting the output label count to the number of unique `soc_code1` values. The `AdamW` optimizer and a learning rate scheduler with a warmup period are used for training.
 
-11. **Training the model with early stopping**:  
+10. **Training the model with early stopping**:  
     The model is trained using a loop with early stopping based on validation loss. If validation loss doesn’t improve for a specified number of consecutive epochs (as set by the `early_stopping_patience` variable), training halts to prevent overfitting.
 
-12. **Evaluating the model**:  
+11. **Evaluating the model**:  
     The model's performance is evaluated on the validation set using a custom evaluation function that computes the validation loss. The model with the lowest validation loss is saved as the best model.
 
 
