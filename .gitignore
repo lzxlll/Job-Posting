@@ -1,0 +1,22 @@
+# Large binary / data files
+*.pkl
+*.pth
+*.bin
+*.h5
+*.msgpack
+*.parquet
+*.csv
+*.jsonl
+
+# Logs & temp
+*.log
+*.tmp.*
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+.ipynb_checkpoints/
+
+# Claude Code local settings
+.claude/
