@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Windows-MCP__PowerShell",
+      "mcp__Windows-MCP__FileSystem",
+      "Bash(find G:Datajob_postingprocessed -maxdepth 1 -type f ! -name *.csv)",
+      "Bash(grep -v \"\\\\.csv$\")",
+      "Bash(python -c \":*)"
+    ]
+  }
+}
