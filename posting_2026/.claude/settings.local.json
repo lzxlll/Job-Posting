@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Windows-MCP__PowerShell",
+      "mcp__Windows-MCP__FileSystem",
+      "Bash(find G:Datajob_postingprocessed -maxdepth 1 -type f ! -name *.csv)",
+      "Bash(grep -v \"\\\\.csv$\")",
+      "Bash(python -c \":*)",
+      "Bash(git -C \"D:\\\\Dropbox\\\\Dropbox\\\\vs_cloud\\\\Job_posting_data\" log --oneline -3)",
+      "Bash(dir \"I:\\\\posting_2026\\\\parquet\\\\招聘_soc_full\")",
+      "Bash(python -c \"import json; from pathlib import Path; d=Path\\(r''I:/posting_2026/parquet/招聘_soc_full''\\); print\\(json.loads\\(\\(d/''checkpoint.json''\\).read_text\\(\\)\\)\\); files=list\\(d.iterdir\\(\\)\\); print\\(''Files:'', len\\(files\\)\\); [print\\(f.name, f.stat\\(\\).st_size\\) for f in sorted\\(files\\)]\")",
+      "Bash(python -c \"import subprocess; r=subprocess.run\\([''tasklist'',''/FI'',''IMAGENAME eq python.exe'',''/FO'',''CSV''],capture_output=True,text=True\\); print\\(r.stdout\\)\")",
+      "Bash(python -c \"import os; files = os.listdir\\(r''D:\\\\Dropbox\\\\Dropbox\\\\vs_cloud\\\\Spatial_data_project\\\\Production_tech_estimation''\\); print\\(''\\\\n''.join\\(sorted\\(files\\)\\)\\)\")",
+      "Bash(python -c \"import os; os.makedirs\\(r''C:\\\\Users\\\\DELL\\\\.claude\\\\projects\\\\D--Dropbox-Dropbox-vs-cloud-Job-posting-data\\\\memory'', exist_ok=True\\); print\\(''done''\\)\")",
+      "Bash(C:/Python313/python.exe -c \"import torch; print\\(''torch:'', torch.__version__\\); print\\(''cuda:'', torch.cuda.is_available\\(\\)\\); print\\(''gpu:'', torch.cuda.get_device_name\\(0\\) if torch.cuda.is_available\\(\\) else ''N/A''\\)\")",
+      "Bash(C:/Python313/python.exe -c \"import onnxruntime; print\\(onnxruntime.__version__\\); print\\(onnxruntime.get_available_providers\\(\\)\\)\")",
+      "Bash(C:/Python313/python.exe -c \"import transformers; print\\(''transformers:'', transformers.__version__\\); import sys; print\\(''python:'', sys.version\\)\")",
+      "Bash(C:/Python313/python.exe -c \"import pathlib; p = pathlib.Path\\(r''G:/Data/job_posting/processed/model''\\); print\\([f.name for f in p.iterdir\\(\\)]\\)\")",
+      "Bash(C:/Python313/python.exe -c \"import json, pathlib; print\\(json.dumps\\(json.loads\\(pathlib.Path\\(r''G:/Data/job_posting/processed/model/config.json''\\).read_text\\(\\)\\), indent=2\\)\\)\")",
+      "Bash(C:/Python313/python.exe -c \"import onnx; print\\(''onnx:'', onnx.__version__\\)\")",
+      "Bash(C:/Python313/python.exe -m pip uninstall onnxruntime -y)",
+      "Bash(taskkill /F /IM python.exe)",
+      "Bash(taskkill /F /IM python313.exe)",
+      "Bash(taskkill //F //IM python.exe)",
+      "Bash(taskkill //F //IM python313.exe)",
+      "Bash(C:/Python313/python.exe export_onnx.py)",
+      "Bash(C:/Python313/python.exe -m pip install onnxscript)",
+      "Bash(ls -lh \"G:/Data/job_posting/processed/model/bert_soc_406.onnx\"*)",
+      "Bash(C:/Python313/python.exe -c \"from pathlib import Path; p = Path\\(r''G:\\\\Data\\\\job_posting\\\\processed\\\\model''\\); [print\\(f''{f.name:40s} {f.stat\\(\\).st_size/1e6:.1f} MB''\\) for f in sorted\\(p.glob\\(''bert_soc*''\\)\\)]\")"
+    ]
+  }
+}

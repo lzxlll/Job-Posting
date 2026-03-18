@@ -1,0 +1,167 @@
+{
+  "动产抵押-抵押变更": {
+    "name": "动产抵押-抵押变更.csv",
+    "status": "done",
+    "encoding": "utf8",
+    "csv_bytes": 12227870,
+    "parquet_bytes": 1764937,
+    "compression_x": 6.93,
+    "elapsed_s": 1.6,
+    "speed_mbs": 7.8,
+    "converted_at": "2026-03-12T16:01:25.074229"
+  },
+  "融资历史": {
+    "name": "融资历史.csv",
+    "status": "done",
+    "encoding": "utf8",
+    "csv_bytes": 77199656,
+    "parquet_bytes": 15554836,
+    "compression_x": 4.96,
+    "elapsed_s": 1.1,
+    "speed_mbs": 72.3,
+    "converted_at": "2026-03-12T16:01:26.144267"
+  },
+  "动产抵押-抵押人": {
+    "name": "动产抵押-抵押人.csv",
+    "status": "done",
+    "encoding": "utf8",
+    "csv_bytes": 169816856,
+    "parquet_bytes": 24075666,
+    "compression_x": 7.05,
+    "elapsed_s": 1.3,
+    "speed_mbs": 128.6,
+    "converted_at": "2026-03-12T16:01:27.466650"
+  },
+  "股权出质": {
+    "name": "股权出质.csv",
+    "status": "done",
+    "encoding": "utf8",
+    "csv_bytes": 194370298,
+    "parquet_bytes": 31111279,
+    "compression_x": 6.25,
+    "elapsed_s": 1.5,
+    "speed_mbs": 129.2,
+    "converted_at": "2026-03-12T16:01:28.972692"
+  },
+  "动产抵押": {
+    "name": "动产抵押.csv",
+    "status": "done",
+    "encoding": "utf8",
+    "csv_bytes": 349636309,
+    "parquet_bytes": 44618515,
+    "compression_x": 7.84,
+    "elapsed_s": 2.9,
+    "speed_mbs": 122.6,
+    "converted_at": "2026-03-12T16:01:31.824982"
+  },
+  "产品许可": {
+    "name": "产品许可.csv",
+    "status": "done",
+    "encoding": "utf8",
+    "csv_bytes": 464448982,
+    "parquet_bytes": 40651147,
+    "compression_x": 11.43,
+    "elapsed_s": 4.9,
+    "speed_mbs": 95.1,
+    "converted_at": "2026-03-12T16:01:36.712534"
+  },
+  "动产抵押-抵押物": {
+    "name": "动产抵押-抵押物.csv",
+    "status": "done",
+    "encoding": "utf8",
+    "csv_bytes": 2294774260,
+    "parquet_bytes": 214775509,
+    "compression_x": 10.68,
+    "elapsed_s": 19.7,
+    "speed_mbs": 116.3,
+    "converted_at": "2026-03-12T16:01:56.789472"
+  },
+  "分支机构": {
+    "name": "分支机构.csv",
+    "status": "done",
+    "encoding": "utf8",
+    "csv_bytes": 2442897226,
+    "parquet_bytes": 650281226,
+    "compression_x": 3.76,
+    "elapsed_s": 24.2,
+    "speed_mbs": 101.0,
+    "converted_at": "2026-03-12T16:02:20.970678"
+  },
+  "对外投资": {
+    "name": "对外投资.csv",
+    "status": "done",
+    "encoding": "utf8",
+    "csv_bytes": 2799699734,
+    "parquet_bytes": 757901999,
+    "compression_x": 3.69,
+    "elapsed_s": 24.5,
+    "speed_mbs": 114.1,
+    "converted_at": "2026-03-12T16:02:45.505296"
+  },
+  "主要人员": {
+    "name": "主要人员.csv",
+    "status": "done",
+    "encoding": "utf8",
+    "csv_bytes": 20005426121,
+    "parquet_bytes": 4712785651,
+    "compression_x": 4.24,
+    "elapsed_s": 516.7,
+    "speed_mbs": 38.7,
+    "converted_at": "2026-03-12T16:11:22.201112"
+  },
+  "股东信息": {
+    "name": "股东信息.csv",
+    "status": "done",
+    "encoding": "utf8",
+    "csv_bytes": 26735895547,
+    "parquet_bytes": 5683242462,
+    "compression_x": 4.7,
+    "elapsed_s": 286.6,
+    "speed_mbs": 93.3,
+    "converted_at": "2026-03-12T16:24:17.713758"
+  },
+  "年报社保财报信息": {
+    "name": "年报社保财报信息.csv",
+    "status": "done",
+    "encoding": "utf8",
+    "csv_bytes": 121544844282,
+    "parquet_bytes": 13325977534,
+    "compression_x": 9.12,
+    "elapsed_s": 4053.0,
+    "speed_mbs": 30.0,
+    "converted_at": "2026-03-12T17:31:50.752667"
+  },
+  "工商变更": {
+    "name": "工商变更.csv",
+    "status": "done",
+    "encoding": "utf8",
+    "csv_bytes": 197535415313,
+    "parquet_bytes": 34346376781,
+    "compression_x": 5.75,
+    "elapsed_s": 6791.7,
+    "speed_mbs": 29.1,
+    "converted_at": "2026-03-12T19:25:02.482297"
+  },
+  "工商信息": {
+    "name": "工商信息.csv",
+    "status": "done",
+    "encoding": "utf8",
+    "csv_bytes": 223755684781,
+    "parquet_bytes": 34532063061,
+    "compression_x": 6.48,
+    "elapsed_s": 7739.9,
+    "speed_mbs": 28.9,
+    "converted_at": "2026-03-12T21:34:02.425223"
+  },
+  "招聘": {
+    "name": "招聘.csv",
+    "status": "done",
+    "encoding": "utf8",
+    "csv_bytes": 451962406211,
+    "parquet_bytes": 90310020896,
+    "compression_x": 5.0,
+    "elapsed_s": 23608.1,
+    "speed_mbs": 19.1,
+    "converted_at": "2026-03-13T04:07:30.622318"
+  }
+}
