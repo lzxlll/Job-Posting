@@ -162,6 +162,8 @@ Parquet files (est. 100-200 GB, columnar, compressed, typed)
 | 2026-03-15 | Central path config | ✅ Done | `config.py` created — single `BASE_DIR = I:\posting_2026`; all scripts import from it |
 | 2026-03-15 | CUDA GPU setup | ✅ Done | Reinstalled PyTorch 2.10.0+cu128 (was +cpu); installed `accelerate`; verified: CUDA available, Quadro RTX 5000, 16GB VRAM |
 | 2026-03-16 | Step 6: ML inference | ✅ Done | `08_bert_inference.py` — SOC code labeling via fine-tuned BERT (406 classes); 1M-row local test; output: `招聘_soc_labels.parquet` + DuckDB view `招聘_labeled` |
+| 2026-03-16 | Step 6 summary stats | ✅ Done | `09_soc_summary.py` — profiled 575,707 labeled rows: 403/406 SOC codes used; avg conf 79.8%; median 91.6% (bimodal: 56.7% ≥90%, 18.2% <50%); top code `112020` 4.0%; ~42% of all 641M rows are title-only (no description); `公司ID=0` aggregates 25,725 rows (likely null IDs — flag in analysis) |
+| 2026-03-16 | Step 7: Full-scale inference | 🔄 IN PROGRESS | `10_full_inference.py` — two-phase pipeline: Phase A (title dedup) running, Phase B (full rows) pending. Sidecar output: `招聘_soc_all_labels.parquet` + view `招聘_soc_all_labeled` |
 
 ---
 
@@ -225,6 +227,9 @@ Parquet files (est. 100-200 GB, columnar, compressed, typed)
 | `07_data_cleaning.py` | Cleans 10 columns → 5 `_clean` views in `enterprise.duckdb` |
 | `07_cleaning_report.md` | Cleaning validation report — sample counts and parse rates |
 | `08_bert_inference.py` | **Step 6** — SOC code inference on 招聘_clean using fine-tuned BERT (406 classes); outputs `招聘_soc_labels.parquet` + DuckDB view `招聘_labeled` |
+| `09_soc_summary.py` | Summary statistics on labeled subsample (`招聘_soc_labels.parquet`) — confidence distribution, top/bottom SOC codes, by-year breakdown, company coverage |
+| `no_desc_check.py` | Ad-hoc: estimate share of rows with no usable description (~42% of full dataset) |
+| `10_full_inference.py` | **Step 7** — Full-scale SOC inference on all 641M rows; two-phase (title dedup + full rows); resume-safe checkpointing; sidecar output `招聘_soc_all_labels.parquet` + view `招聘_soc_all_labeled` |
 
 ---
 
@@ -235,6 +240,7 @@ Parquet files (est. 100-200 GB, columnar, compressed, typed)
 | Step 4: DuckDB persistent DB | Create `enterprise.duckdb` with Parquet views for fast SQL | High | ✅ Done — `05_setup_duckdb.py`, 15 views + 5 macros |
 | Step 5: SQL Server load | ~~Bulk-load small/medium tables; load filtered subsets of giants~~ | ~~Medium~~ | ⏭️ **Skipped** — local-only workflow, DuckDB covers all query needs |
 | Step 6: ML inference | Inference via fine-tuned BERT (406 SOC classes) → `招聘_soc_labels.parquet` + DuckDB view | High | ✅ Done — `08_bert_inference.py` |
+| Step 7: Full-scale inference | Label all 641M rows: Phase A title dedup + Phase B full rows → `招聘_soc_all_labels.parquet` | High | 🔄 IN PROGRESS — `10_full_inference.py` (Phase A running as of 2026-03-16) |
 | Data cleaning | Parse `注册资本`, `工作薪酬`, `参保人数` into numeric types | High | ✅ Done — `07_data_cleaning.py`, 5 clean views in enterprise.duckdb |
 | SAS access | Point SAS LIBNAME at Parquet dir (SAS 9.4M6+) | Low | As needed |
 
@@ -244,3 +250,40 @@ Parquet files (est. 100-200 GB, columnar, compressed, typed)
 |------|----------|--------|
 | 2026-03-13 | Skip SQL Server (Step 5) | Single-user local workflow; DuckDB reads Parquet directly with equivalent speed; no need for shared/network access or BI tool integration |
 | 2026-03-13 | DuckDB as sole query engine | 128 GB RAM + Parquet columnar storage sufficient for all analytical tasks including joins across 2.86B rows |
+| 2026-03-16 | Sidecar output for SOC labels | Source `招聘\data.parquet` never modified; predictions stored in separate `招聘_soc_all_labels.parquet [表ID, soc_code_pred, soc_prob]`; joined at query time via `表ID` |
+| 2026-03-16 | Title deduplication (Phase A) | ~42% of 641M rows have no description; 23.8M unique titles — infer once per title to avoid 269M redundant GPU passes |
+| 2026-03-16 | PyArrow iter_batches for chunking | DuckDB OFFSET/LIMIT re-scans file from start for each chunk (O(N²) I/O); PyArrow row-group iteration is pure sequential I/O |
+| 2026-03-16 | batch_full=256, batch_title=1024 | CPU tokenizer was bottleneck at batch=256 for short title texts (GPU ~0.2% util); larger batches amortize tokenizer overhead |
+
+---
+
+## Step 7: Full-Scale SOC Inference — Technical Notes
+
+### Architecture (`10_full_inference.py`)
+- **Phase A**: DuckDB `SELECT DISTINCT 工作名称` on title-only rows → 23.8M unique titles → GPU inference (batch=1024, title×2 text) → `招聘_soc_title_lookup.parquet [工作名称, soc_code_pred, soc_prob]`
+- **Phase B**: PyArrow `iter_batches(2M rows)` over full parquet → per chunk: full rows → GPU (batch=256) → `chunk_NNNNN.parquet`; title-only → `titleonly_NNNNN.parquet [表ID, 工作名称]`
+- **Combine**: DuckDB `COPY TO` UNION ALL of chunks + (titleonly ⋈ lookup) → `招聘_soc_all_labels.parquet`
+- **Checkpoint**: `I:\posting_2026\parquet\招聘_soc_full\checkpoint.json` — atomic writes, resume-safe
+
+### Output files
+| File | Schema | Notes |
+|------|--------|-------|
+| `招聘_soc_full\chunk_NNNNN.parquet` | [表ID, soc_code_pred, soc_prob] | Phase B full-row chunks |
+| `招聘_soc_full\titleonly_NNNNN.parquet` | [表ID, 工作名称] | Phase B title-only metadata |
+| `招聘_soc_title_lookup.parquet` | [工作名称, soc_code_pred, soc_prob] | Phase A lookup |
+| `招聘_soc_all_labels.parquet` | [表ID, soc_code_pred, soc_prob] | Final sidecar |
+
+### Key findings from 575K sample (Step 6)
+- 403/406 SOC codes assigned; top code `112020` = 4.0% of rows
+- Confidence bimodal: 56.7% ≥90%, 18.2% <50%; avg 79.8%, median 91.6%
+- Low-confidence SOC codes: `439050` (34%), `359090` (37%), `516040` (38%) — catch-all `*090/010` codes
+- `公司ID=0`: 25,725 rows, 364 SOC codes — likely null company IDs aggregated; flag in analysis
+- Title-only rows: ~42% of full 641M dataset (no usable `职责描述`)
+- Unique job titles in title-only subset: **23,801,022**
+
+### Estimated total runtime (Quadro RTX 5000, fp16)
+| Phase | Status | Est. time |
+|-------|--------|-----------|
+| A (23.8M unique titles, batch=1024) | 🔄 Running (~1,640/sec, ETA ~3.4 hr at session close) | ~4 hr total |
+| B (372M full rows, batch=256) | ⏳ Pending | ~85–100 hr |
+| Combine (DuckDB) | ⏳ Pending | ~1–2 hr |
